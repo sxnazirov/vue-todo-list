@@ -2,9 +2,12 @@
   <li>
     <span v-bind:class="{done: todo.completed}">
       <input type="checkbox" v-on:change="todo.completed = !todo.completed">
+      <strong>{{index + 1}}</strong>
       {{todo.title}}
     </span>
-    <button class="rm">&times;</button>
+    <button class="rm"
+            v-on:click="$emit('remove-todo', todo.id)"
+    >&times;</button>
   </li>
 </template>
 
@@ -14,7 +17,8 @@ export default {
     todo:{
       type: Object,
       required: true
-    }
+    },
+    index: Number
   }
 }
 </script>

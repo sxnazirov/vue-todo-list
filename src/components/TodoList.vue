@@ -2,9 +2,11 @@
   <div>
     <ul>
       <TodoItem
-          v-for="todo of todos"
+          v-for="(todo, i) of todos"
           :key="todo.id"
           v-bind:todo="todo"
+          v-bind:index="i"
+          v-on:remove-todo="removeTodo"
       />
     </ul>
   </div>
@@ -16,6 +18,11 @@ export default {
   props: ['todos'],
   components: {
     TodoItem
+  },
+  methods: {
+    removeTodo(id) {
+      this.$emit('remove-todo', id)
+    }
   }
 }
 </script>
