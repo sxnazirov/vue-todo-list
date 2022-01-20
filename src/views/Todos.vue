@@ -31,7 +31,7 @@
     <TodoList
         v-else-if="filteredTodos.length"
         v-bind:todos="filteredTodos"
-        v-bind:limit="setTodoItemLimit"
+        v-bind:limit="todoItemLimit"
         @remove-todo="removeTodo"
     />
     <p v-else>No todos!</p>
@@ -60,20 +60,14 @@ export default {
     }
   },
   mounted() {
-    fetch('https://jsonplaceholder.typicode.com/todos?_limit=' + this.setTodoItemLimit)
-        .then(response => response.json())
-        .then(json => {
-          setTimeout(() => {
-            this.todos = json
-            this.loading = false
-          }, 1000)
-        })
+    this.loadData()
   },
-  // watch: {
-  //   setTodoItemLimit(value) {
-  //     console.log(value)
-  //   }
-  // },
+  watch: {
+    todoItemLimit() {
+      // this.todoItemLimit = value
+      this.loadData()
+    }
+  },
   computed: {
     filteredTodos() {
       var filter
@@ -92,10 +86,10 @@ export default {
       return filter
     },
 
-    setTodoItemLimit() {
-      console.log(this.todoItemLimit)
-      return this.todoItemLimit
-    }
+    // setTodoItemLimit() {
+    //   console.log(this.todoItemLimit)
+    //   return this.todoItemLimit
+    // }
   },
   methods: {
     removeTodo(id) {
@@ -103,6 +97,16 @@ export default {
     },
     addTodo(todo) {
       this.todos.push(todo)
+    },
+    loadData() {
+      fetch('https://jsonplaceholder.typicode.com/todos?_limit=' + this.todoItemLimit)
+          .then(response => response.json())
+          .then(json => {
+            setTimeout(() => {
+              this.todos = json
+              this.loading = false
+            }, 1000)
+          })
     }
   }
 }
